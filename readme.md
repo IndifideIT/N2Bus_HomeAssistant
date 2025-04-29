@@ -39,9 +39,6 @@ Ethernet ≥ 2.0.0 (bundled with AVR core)
 PubSubClient ≥ 2.8.0 (install via Tools → Manage Libraries)
 
 Configuration inside the sketch
-cpp
-Kopiuj
-Edytuj
 IPAddress ip      (192,168,1,51);   // sniffer IP
 IPAddress mqttSrv (192,168,1,10);   // MQTT broker (e.g. Mosquitto add-on)
 byte mac[] = { 0xDE,0xAD,0xBE,0xEF,0xFE,0xED }; // unique MAC
@@ -53,9 +50,7 @@ Install the Mosquitto Broker add-on (or use any MQTT server).
 
 In Developer Tools → MQTT → Listen subscribe to home/n2/raw/# – you should immediately see messages like:
 
-bash
-Kopiuj
-Edytuj
+
 Topic: home/n2/raw/8/1   Payload: 22.3
 Topic: home/n2/raw/8/7   Payload: 1
 Add entities (YAML example):
