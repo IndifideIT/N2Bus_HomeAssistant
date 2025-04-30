@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 //  N2RawMQTT.ino  –  Johnson‑Controls N2 passive sniffer  ➜  MQTT
-//  Author : Przemysław Myk  (2025‑04-29)
+//  Author : Przemysław Myk  (2025‑05‑01)
 // ---------------------------------------------------------------------------
 //  Hardware  :  Arduino MEGA 2560  +  W5100 Ethernet shield  +  MAX485 RS‑485
 //               RO ➜ RX3 (pin 15)   ·  DI — not connected
@@ -22,8 +22,16 @@
 
 // ---------------- Ethernet / MQTT -----------------------------------------
 byte mac[]   = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };   // unique MAC
+
+
+// ---------- user settings --------------------------------------------------
+const char*  TOPIC_ROOT = "nae1";    // ← dowolny prefiks MQTT
+const char*  LINE_ID    = "n2";       // ta konkretna RS-485
+
 IPAddress ip       (192, 168, 1,  51);   // sniffer IP address
-IPAddress mqttSrv  (192, 168, 1,  228);   // MQTT broker (Home Assistant)
+IPAddress mqttSrv  (192, 168, 1,  227);   // MQTT broker (Home Assistant)
+//---------------------------------------------------------------------------/
+
 
 EthernetClient eth;
 PubSubClient   mqtt(eth);
@@ -74,8 +82,8 @@ void publishIfChanged(uint8_t addr, uint8_t reg, float v)
   if (seenCnt < MAX_SEEN) seen[seenCnt++] = {addr, reg, v};
 
 send:
-  char topic[32];
-  sprintf(topic, "home/n2/raw/%u/%u", addr, reg);
+  char topic[48];
+  sprintf(topic, "%s/%s/%u/%u", TOPIC_ROOT, LINE_ID, addr, reg);
   char payload[16];
   dtostrf(v, 0, 2, payload);
   mqtt.publish(topic, payload, true);               // retain = true
